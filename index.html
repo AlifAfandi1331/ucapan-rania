@@ -16,75 +16,11 @@
   #pin-page {
     position: fixed; width: 100%; height: 100%;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    background: #fff0f5; z-index: 10;
+    background: #fff0f5; z-index: 10; transition: opacity 0.5s;
   }
   #pin-page input {
-    padding: 15px; font-size: 1.5em; text-align: center;
-    border: 3px solid #ffb6c1; border-radius: 10px; width: 200px; letter-spacing: 5px;
+    padding: 15px; font-size: 1.8em; text-align: center;
+    border: 3px solid #ffb6c1; border-radius: 15px; width: 220px; letter-spacing: 8px;
+    outline: none;
   }
-  #pin-page button {
-    margin-top: 15px; padding: 12px 30px; font-size: 1.1em;
-    background: #ff69b4; color: white; border: none; border-radius: 10px; cursor: pointer;
-  }
-  /* CARD FLIP */
-  .card-container { perspective: 1000px; width: 90%; max-width: 400px; margin: 50px auto; }
-  .card { 
-    position: relative; width: 100%; height: 500px; 
-    transition: transform 0.8s; transform-style: preserve-3d; cursor: pointer;
-  }
-  .card.flipped { transform: rotateY(180deg); }
-  .front, .back {
-    position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-    border-radius: 20px; box-shadow: 0 10px 30px rgba(255,182,193,0.4);
-    background: white; padding: 20px; box-sizing: border-box; text-align: center;
-  }
-  .back { transform: rotateY(180deg); }
-  .cat-img { width: 200px; border-radius: 15px; border: 4px solid #ffb6c1; }
-  h1 { color: #ff69b4; }
-  /* BALON */
-  .balloon { position: fixed; bottom: -100px; width: 40px; height: 60px; background: #ffb6c1; border-radius: 50%; animation: float 6s infinite ease-in; }
-  @keyframes float { to { bottom: 110%; transform: translateX(50px); opacity: 0; } }
-</style>
-</head>
-<body>
-
-<!-- 1. HALAMAN PIN -->
-<div id="pin-page">
-  <h1>Masukin PIN nya dong 👀</h1>
-  <input type="password" id="pinInput" maxlength="6" placeholder="******">
-  <button onclick="checkPin()">Buka</button>
-  <p style="color: red; display: none;" id="error">PIN salah!</p>
-</div>
-
-<!-- 2. HALAMAN KARTU -->
-<div id="main-page" style="display: none;">
-  <div class="card-container">
-    <div class="card" onclick="this.classList.toggle('flipped')">
-      <!-- DEPAN -->
-      <div class="front">
-        <h1>Happy Birthday Rania! 🎀</h1>
-        <img src="rania.jpg" class="cat-img" alt="Rania">
-        <p>Klik kartunya buat buka ucapan 💌</p>
-      </div>
-      <!-- BELAKANG -->
-      <div class="back">
-        <h1>Buat Rania 💗</h1>
-        <p style="font-size: 1.1em;">
-          Semoga di umur baru ini kamu selalu bahagia,<br>
-          sehat, rezekinya lancar, dan semua doa baik terkabul ✨<br><br>
-          Makasih udah jadi orang hebat.<br>
-          <b>You’re gonna live forever in me</b> 🥺
-        </p>
-        <p><i>Klik lagi buat balik</i></p>
-      </div>
-    </div>
-  </div>
-  <audio id="bgm" src="lagu.mp3" autoplay loop></audio>
-</div>
-
-<script>
-  // 1. CEK PIN 270107
-  function checkPin() {
-    let pin = document.getElementById('pinInput').value;
-    if(pin === '270107'){
-      document
+  #pin
