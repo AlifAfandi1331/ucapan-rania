@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Rania! 🎂</title>
+<style>
+  body {
+    margin: 0;
+    background: linear-gradient(180deg, #fff0f5 0%, #ffe4ec 100%);
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+    color: #d63384;
+  }
+  .container {
+    padding: 40px 20px;
+  }
+  h1 {
+    font-size: 2.5em;
+    color: #ff69b4;
+    text-shadow: 2px 2px 5px #fff;
+  }
+  .cat-img {
+    width: 250px;
+    border-radius: 20px;
+    border: 5px solid #ffb6c1;
+    box-shadow: 0 0 20px #ffc0cb;
+    margin: 20px auto;
+  }
+  .message {
+    font-size: 1.2em;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 20px auto;
+    box-shadow: 0 4px 15px rgba(255,182,193,0.3);
+  }
+  .balloon {
+    position: fixed;
+    bottom: -100px;
+    width: 40px;
+    height: 60px;
+    background: #ffb6c1;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: float 6s infinite ease-in;
+  }
+  @keyframes float {
+    to { bottom: 110%; transform: translateX(50px); opacity: 0; }
+  }
+  audio { margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Happy Birthday Rania! 🎀</h1>
+  
+  <img src="rania.jpg" class="cat-img" alt="Rania">
+  
+  <div class="message">
+    Buat Rania yg paling special 🥳<br>
+    Semoga di umur baru ini kamu selalu bahagia,<br>
+    sehat terus, dan semua doa baik terkabul ✨<br>
+    <br>
+    <b>You’re gonna live forever in me</b> 💗
+  </div>
+
+  <audio controls autoplay loop>
+    <source src="lagu.mp3" type="audio/mpeg">
+    Browser kamu ga support audio.
+  </audio>
+</div>
+
+<script>
+  // Balon pink berterbangan
+  for(let i=0; i<15; i++){
+    let b = document.createElement('div');
+    b.className = 'balloon';
+    b.style.left = Math.random()*100 + 'vw';
+    b.style.animationDelay = Math.random()*5 + 's';
+    b.style.background = i%2==0 ? '#ffb6c1' : '#fff0f5';
+    document.body.appendChild(b);
+  }
+</script>
+</body>
+</html>
