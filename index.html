@@ -3,21 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Rania 🎀</title>
+<title>For Rania 📖</title>
 <style>
-  * { box-sizing: border-box; }
   body {
     margin: 0;
-    min-height: 100vh;
     background: linear-gradient(180deg, #fff0f5 0%, #ffe4ec 100%);
     font-family: 'Poppins', sans-serif;
-    overflow-x: hidden;
+    overflow: hidden;
     color: #d63384;
+    display: flex; justify-content: center; align-items: center; height: 100vh;
   }
-
-  /* ===== PAGE PIN ===== */
+  /* PAGE PIN */
   #pin-page {
-    position: fixed; inset: 0;
+    position: fixed; width: 100%; height: 100%;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     background: #fff0f5; z-index: 10; transition: opacity 0.5s;
   }
@@ -26,119 +24,39 @@
     border: 3px solid #ffb6c1; border-radius: 15px; width: 220px; letter-spacing: 8px;
     outline: none;
   }
-  #pin-page input:focus { border-color: #ff69b4; box-shadow: 0 0 15px #ffb6c1; }
 
-  /* ===== MAIN / BOOK ===== */
-  #main-page {
+  /* BUKU */
+  #book { 
     display: none; opacity: 0; transition: opacity 1s;
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 30px 10px;
+    perspective: 1500px; 
   }
-  #main-page.show { display: flex; opacity: 1; }
-
-  .book-wrap {
-    perspective: 1800px;
-    width: 92%;
-    max-width: 380px;
-    position: relative;
-  }
-  /* garis lipatan/spine buku di kiri */
-  .book-wrap::before {
-    content: '';
-    position: absolute;
-    left: -2px; top: 6px; bottom: 6px;
-    width: 14px;
-    background: linear-gradient(to right, rgba(0,0,0,0.18), transparent);
-    border-radius: 18px 0 0 18px;
-    z-index: 5;
-    pointer-events: none;
-  }
+  #book.show { display: block; opacity: 1; }
   .book {
-    position: relative;
-    width: 100%;
-    height: 520px;
+    width: 320px; height: 450px; position: relative;
   }
   .page {
-    position: absolute;
-    inset: 0;
-    background: white;
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(255,182,193,0.45);
-    padding: 26px 22px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    transform-origin: left center;
-    transform-style: preserve-3d;
+    position: absolute; width: 100%; height: 100%;
+    background: white; border-radius: 0 15px 15px 0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    transform-origin: left;
+    transition: transform 1s;
+    padding: 25px; box-sizing: border-box; text-align: center;
     backface-visibility: hidden;
-    will-change: transform;
+    cursor: pointer;
   }
-  .page h1 { color: #ff69b4; font-size: 1.35em; margin: 0 0 10px; }
-  .page p { font-size: 1.05em; line-height: 1.6; margin: 10px 0; }
-  .cat-img { width: 170px; border-radius: 15px; border: 4px solid #ffb6c1; margin: 8px 0; }
-  .page-label { font-size: 0.75em; opacity: 0.5; margin-top: auto; }
-
-  /* overlay shading yang nyala pas halaman lagi mid-flip, biar keliatan ada lekukan kertas */
-  .page::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 18px;
-    background: linear-gradient(to right, rgba(0,0,0,0.25), rgba(0,0,0,0) 45%);
-    opacity: 0;
-    pointer-events: none;
+  .page.flipped { transform: rotateY(-180deg); }
+  
+  .page h1 { color: #ff69b4; margin-top: 10px; }
+  .cat-img { width: 180px; border-radius: 15px; border: 4px solid #ffb6c1; margin: 15px 0; }
+  .page p { font-size: 1em; line-height: 1.6; }
+  .next-btn {
+    position: absolute; bottom: 15px; right: 20px;
+    background: #ff69b4; color: white; border: none; padding: 8px 15px;
+    border-radius: 8px; cursor: pointer;
   }
-
-  /* stacking order: page 1 on top */
-  #page-1 { z-index: 4; }
-  #page-2 { z-index: 3; }
-  #page-3 { z-index: 2; }
-  #page-4 { z-index: 1; }
-
-  .page.turning-fwd  { animation: turnFwd 0.85s cubic-bezier(.45,.05,.35,1) forwards; }
-  .page.turning-back { animation: turnBack 0.85s cubic-bezier(.45,.05,.35,1) forwards; }
-  .page.turned { transform: rotateY(-180deg); }
-
-  @keyframes turnFwd {
-    0%   { transform: rotateY(0deg) scaleY(1); box-shadow: 0 10px 30px rgba(255,182,193,0.45); }
-    45%  { transform: rotateY(-95deg) scaleY(0.985); box-shadow: -30px 15px 45px rgba(0,0,0,0.3); }
-    100% { transform: rotateY(-180deg) scaleY(1); box-shadow: 0 10px 30px rgba(255,182,193,0.2); }
-  }
-  @keyframes turnBack {
-    0%   { transform: rotateY(-180deg) scaleY(1); box-shadow: 0 10px 30px rgba(255,182,193,0.2); }
-    55%  { transform: rotateY(-85deg) scaleY(0.985); box-shadow: 30px 15px 45px rgba(0,0,0,0.3); }
-    100% { transform: rotateY(0deg) scaleY(1); box-shadow: 0 10px 30px rgba(255,182,193,0.45); }
-  }
-  .page.turning-fwd::after  { animation: shadeFwd 0.85s cubic-bezier(.45,.05,.35,1) forwards; }
-  .page.turning-back::after { animation: shadeBack 0.85s cubic-bezier(.45,.05,.35,1) forwards; }
-  @keyframes shadeFwd  { 0% { opacity: 0; } 45% { opacity: 0.9; } 100% { opacity: 0; } }
-  @keyframes shadeBack { 0% { opacity: 0; } 55% { opacity: 0.9; } 100% { opacity: 0; } }
-
-  /* ===== NAV ===== */
-  .nav {
-    display: flex; align-items: center; justify-content: center;
-    gap: 22px; margin-top: 22px;
-  }
-  .nav button {
-    background: #ff69b4; color: white; border: none;
-    width: 44px; height: 44px; border-radius: 50%;
-    font-size: 1.2em; cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255,105,180,0.4);
-    transition: transform 0.15s, opacity 0.2s;
-  }
-  .nav button:active { transform: scale(0.9); }
-  .nav button:disabled { opacity: 0.35; cursor: default; }
-  .nav span { font-size: 0.9em; color: #d63384; min-width: 40px; }
-
-  /* ===== BALON ===== */
-  .balloon {
-    position: fixed; bottom: -100px; width: 40px; height: 60px;
-    background: #ffb6c1; border-radius: 50%;
-    animation: float 6s infinite ease-in; pointer-events: none;
-  }
+  
+  /* BALON */
+  .balloon { position: fixed; bottom: -100px; width: 40px; height: 60px; background: #ffb6c1; border-radius: 50%; animation: float 6s infinite ease-in; z-index: -1; }
   @keyframes float { to { bottom: 110%; transform: translateX(50px); opacity: 0; } }
 </style>
 </head>
@@ -146,138 +64,92 @@
 
 <!-- 1. HALAMAN PIN -->
 <div id="pin-page">
-  <h1>Ini Kania bukan 👀</h1>
+  <h1>Masukin PIN nya 👀</h1>
   <input type="password" id="pinInput" maxlength="6" placeholder="******" autofocus>
   <p style="color: red; display: none;" id="error">PIN salah!</p>
 </div>
 
-<!-- 2. HALAMAN BUKU (4 halaman) -->
-<div id="main-page">
-  <div class="book-wrap">
-    <div class="book">
-
-      <div class="page" id="page-1">
-        <h1>Happy Birthday Raniaaa! 🎀</h1>
-        <img src="rania.jpg" class="cat-img" alt="Rania">
-        <p>Klik panah di bawah buat buka halaman ➡️</p>
-        <span class="page-label">1 / 4</span>
-      </div>
-
-      <div class="page" id="page-2">
-        <h1>Buat Rania 💗</h1>
-        <p>
-          Semoga di umur baru ini kamu selalu bahagia,
-          sehat, rezekinya lancar, dan semua doa baik terkabul ✨
-        </p>
-        <span class="page-label">2 / 4</span>
-      </div>
-
-      <div class="page" id="page-3">
-        <h1>Makasih ya 🥹</h1>
-        <p>
-          Makasih udah jadi orang hebat dan udah jadi bagian
-          penting di hidup aku. Semoga tahun ini penuh hal-hal baik buat kamu.
-        </p>
-        <span class="page-label">3 / 4</span>
-      </div>
-
-      <div class="page" id="page-4">
-        <h1>Selamanya 💫</h1>
-        <p><b>You're gonna live forever in me</b> 🥺</p>
-        <p>Happy birthday, Rania!</p>
-        <span class="page-label">4 / 4</span>
-      </div>
-
+<!-- 2. BUKU 4 HALAMAN -->
+<div id="book">
+  <div class="book">
+    <!-- HAL 1 COVER -->
+    <div class="page" id="page1" style="z-index: 4;">
+      <h1>Untuk Rania 🎀</h1>
+      <img src="rania.jpg" class="cat-img">
+      <p>Klik tombol "Berikutnya" buat buka</p>
+      <button class="next-btn" onclick="flipPage(1)">Berikutnya →</button>
+    </div>
+    
+    <!-- HAL 2 FOTO + GREETING -->
+    <div class="page" id="page2" style="z-index: 3;">
+      <h1>Happy Birthday! 🎉</h1>
+      <p>Di hari spesial ini aku cuma mau bilang...<br>
+      kamu orang paling hebat yg aku kenal.</p>
+      <button class="next-btn" onclick="flipPage(2)">Berikutnya →</button>
+    </div>
+    
+    <!-- HAL 3 UCAPAN PANJANG -->
+    <div class="page" id="page3" style="z-index: 2;">
+      <h1>Doa Buat Kamu 💗</h1>
+      <p>Semoga umur baru ini bawa banyak bahagia,<br>
+      sehat selalu, rezeki lancar, dan semua mimpi tercapai ✨<br><br>
+      Makasih udah ada. You mean a lot to me.</p>
+      <button class="next-btn" onclick="flipPage(3)">Berikutnya →</button>
+    </div>
+    
+    <!-- HAL 4 PENUTUP -->
+    <div class="page" id="page4" style="z-index: 1;">
+      <h1>Love You 🥺</h1>
+      <p><b>You’re gonna live forever in me</b><br><br>
+      Klik dari pinggir buat nutup bukunya lagi ya</p>
     </div>
   </div>
-
-  <div class="nav">
-    <button id="prevBtn" onclick="prevPage()">‹</button>
-    <span id="pageCounter">1 / 4</span>
-    <button id="nextBtn" onclick="nextPage()">›</button>
-  </div>
-
   <audio id="bgm" src="lagu.mp3" loop></audio>
 </div>
 
 <script>
-  // ===== PIN =====
   const pinInput = document.getElementById('pinInput');
-  const correctPin = '270701';
+  const correctPin = '270107'; // <-- GANTI PIN DI SINI
+  let currentPage = 1;
 
+  // CEK PIN OTOMATIS
   pinInput.addEventListener('input', function() {
-    if (pinInput.value === correctPin) {
+    if(pinInput.value === correctPin){
       document.getElementById('pin-page').style.opacity = '0';
       setTimeout(() => {
         document.getElementById('pin-page').style.display = 'none';
-        document.getElementById('main-page').classList.add('show');
-        document.getElementById('bgm').play();
+        document.getElementById('book').classList.add('show');
+        document.getElementById('bgm').play(); // Autoplay lagu
         createBalloons();
       }, 500);
-    } else if (pinInput.value.length === 6) {
+    } else if(pinInput.value.length === 6) {
       document.getElementById('error').style.display = 'block';
       setTimeout(() => { pinInput.value = ''; document.getElementById('error').style.display = 'none'; }, 1000);
     }
   });
 
-  // ===== BOOK NAVIGATION =====
-  const totalPages = 4;
-  let current = 1; // number of pages currently turned (0-4)
-  const pages = [null, document.getElementById('page-1'), document.getElementById('page-2'), document.getElementById('page-3'), document.getElementById('page-4')];
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const counter = document.getElementById('pageCounter');
-
-  let animating = false;
-
-  function updateNav() {
-    counter.textContent = current + ' / ' + totalPages;
-    prevBtn.disabled = animating || current <= 1;
-    nextBtn.disabled = animating || current >= totalPages;
+  // FUNGSI BALIK HALAMAN
+  function flipPage(pageNum) {
+    document.getElementById('page' + pageNum).classList.add('flipped');
+    document.getElementById('page' + pageNum).style.zIndex = pageNum;
   }
 
-  function nextPage() {
-    if (animating || current >= totalPages) return;
-    animating = true;
-    const p = pages[current];
-    p.classList.add('turning-fwd');
-    p.addEventListener('animationend', function handler() {
-      p.classList.remove('turning-fwd');
-      p.classList.add('turned');
-      animating = false;
-      current++;
-      updateNav();
-      p.removeEventListener('animationend', handler);
-    });
-    updateNav();
-  }
-
-  function prevPage() {
-    if (animating || current <= 1) return;
-    animating = true;
-    current--;
-    const p = pages[current];
-    p.classList.remove('turned');
-    p.classList.add('turning-back');
-    p.addEventListener('animationend', function handler() {
-      p.classList.remove('turning-back');
-      animating = false;
-      updateNav();
-      p.removeEventListener('animationend', handler);
-    });
-    updateNav();
-  }
-
-  updateNav();
-
-  // ===== BALON =====
+  // Klik halaman buat nutup/balik lagi
+  document.querySelectorAll('.page').forEach((page, index) => {
+    page.addEventListener('click', (e) => {
+      if(e.target.classList.contains('next-btn')) return; // biar tombol ga double
+      page.classList.remove('flipped');
+    })
+  })
+  
+  // BALON
   function createBalloons(){
-    for (let i = 0; i < 15; i++) {
+    for(let i=0; i<15; i++){
       let b = document.createElement('div');
       b.className = 'balloon';
-      b.style.left = Math.random() * 100 + 'vw';
-      b.style.animationDelay = Math.random() * 5 + 's';
-      b.style.background = i % 2 == 0 ? '#ffb6c1' : '#fff0f5';
+      b.style.left = Math.random()*100 + 'vw';
+      b.style.animationDelay = Math.random()*5 + 's';
+      b.style.background = i%2==0 ? '#ffb6c1' : '#fff0f5';
       document.body.appendChild(b);
     }
   }
