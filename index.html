@@ -5,16 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Rania 🎀</title>
 <style>
+  * { box-sizing: border-box; }
   body {
     margin: 0;
+    min-height: 100vh;
     background: linear-gradient(180deg, #fff0f5 0%, #ffe4ec 100%);
     font-family: 'Poppins', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
     color: #d63384;
   }
-  /* PAGE PIN */
+
+  /* ===== PAGE PIN ===== */
   #pin-page {
-    position: fixed; width: 100%; height: 100%;
+    position: fixed; inset: 0;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     background: #fff0f5; z-index: 10; transition: opacity 0.5s;
   }
@@ -24,25 +27,78 @@
     outline: none;
   }
   #pin-page input:focus { border-color: #ff69b4; box-shadow: 0 0 15px #ffb6c1; }
-  /* CARD FLIP */
-  #main-page { display: none; opacity: 0; transition: opacity 1s; }
-  #main-page.show { display: block; opacity: 1; }
-  .card-container { perspective: 1000px; width: 90%; max-width: 400px; margin: 50px auto; }
-  .card { 
-    position: relative; width: 100%; height: 500px; 
-    transition: transform 0.8s; transform-style: preserve-3d; cursor: pointer;
+
+  /* ===== MAIN / BOOK ===== */
+  #main-page {
+    display: none; opacity: 0; transition: opacity 1s;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 30px 10px;
   }
-  .card.flipped { transform: rotateY(180deg); }
-  .front, .back {
-    position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
-    border-radius: 20px; box-shadow: 0 10px 30px rgba(255,182,193,0.4);
-    background: white; padding: 20px; box-sizing: border-box; text-align: center;
+  #main-page.show { display: flex; opacity: 1; }
+
+  .book-wrap {
+    perspective: 1800px;
+    width: 92%;
+    max-width: 380px;
   }
-  .back { transform: rotateY(180deg); }
-  .cat-img { width: 200px; border-radius: 15px; border: 4px solid #ffb6c1; }
-  h1 { color: #ff69b4; }
-  /* BALON */
-  .balloon { position: fixed; bottom: -100px; width: 40px; height: 60px; background: #ffb6c1; border-radius: 50%; animation: float 6s infinite ease-in; }
+  .book {
+    position: relative;
+    width: 100%;
+    height: 520px;
+  }
+  .page {
+    position: absolute;
+    inset: 0;
+    background: white;
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(255,182,193,0.45);
+    padding: 26px 22px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transition: transform 0.9s cubic-bezier(.4,.2,.2,1);
+  }
+  .page h1 { color: #ff69b4; font-size: 1.35em; margin: 0 0 10px; }
+  .page p { font-size: 1.05em; line-height: 1.6; margin: 10px 0; }
+  .cat-img { width: 170px; border-radius: 15px; border: 4px solid #ffb6c1; margin: 8px 0; }
+  .page-label { font-size: 0.75em; opacity: 0.5; margin-top: auto; }
+
+  /* stacking order: page 1 on top */
+  #page-1 { z-index: 4; }
+  #page-2 { z-index: 3; }
+  #page-3 { z-index: 2; }
+  #page-4 { z-index: 1; }
+
+  .page.turned { transform: rotateY(-180deg); }
+
+  /* ===== NAV ===== */
+  .nav {
+    display: flex; align-items: center; justify-content: center;
+    gap: 22px; margin-top: 22px;
+  }
+  .nav button {
+    background: #ff69b4; color: white; border: none;
+    width: 44px; height: 44px; border-radius: 50%;
+    font-size: 1.2em; cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255,105,180,0.4);
+    transition: transform 0.15s, opacity 0.2s;
+  }
+  .nav button:active { transform: scale(0.9); }
+  .nav button:disabled { opacity: 0.35; cursor: default; }
+  .nav span { font-size: 0.9em; color: #d63384; min-width: 40px; }
+
+  /* ===== BALON ===== */
+  .balloon {
+    position: fixed; bottom: -100px; width: 40px; height: 60px;
+    background: #ffb6c1; border-radius: 50%;
+    animation: float 6s infinite ease-in; pointer-events: none;
+  }
   @keyframes float { to { bottom: 110%; transform: translateX(50px); opacity: 0; } }
 </style>
 </head>
@@ -50,67 +106,118 @@
 
 <!-- 1. HALAMAN PIN -->
 <div id="pin-page">
-  <h1> Ini Kania bukan 👀</h1>
+  <h1>Ini Kania bukan 👀</h1>
   <input type="password" id="pinInput" maxlength="6" placeholder="******" autofocus>
   <p style="color: red; display: none;" id="error">PIN salah!</p>
 </div>
 
-<!-- 2. HALAMAN KARTU -->
+<!-- 2. HALAMAN BUKU (4 halaman) -->
 <div id="main-page">
-  <div class="card-container">
-    <div class="card" onclick="this.classList.toggle('flipped')">
-      <!-- DEPAN -->
-      <div class="front">
+  <div class="book-wrap">
+    <div class="book">
+
+      <div class="page" id="page-1">
         <h1>Happy Birthday Raniaaa! 🎀</h1>
         <img src="rania.jpg" class="cat-img" alt="Rania">
-        <p>Klik kartunya buat buka ucapan 💌</p>
+        <p>Klik panah di bawah buat buka halaman ➡️</p>
+        <span class="page-label">1 / 4</span>
       </div>
-      <!-- BELAKANG -->
-      <div class="back">
+
+      <div class="page" id="page-2">
         <h1>Buat Rania 💗</h1>
-        <p style="font-size: 1.1em;">
-          Semoga di umur baru ini kamu selalu bahagia,<br>
-          sehat, rezekinya lancar, dan semua doa baik terkabul ✨<br><br>
-          Makasih udah jadi orang hebat.<br>
-          <b>You’re gonna live forever in me</b> 🥺
+        <p>
+          Semoga di umur baru ini kamu selalu bahagia,
+          sehat, rezekinya lancar, dan semua doa baik terkabul ✨
         </p>
-        <p><i>Klik lagi buat balik</i></p>
+        <span class="page-label">2 / 4</span>
       </div>
+
+      <div class="page" id="page-3">
+        <h1>Makasih ya 🥹</h1>
+        <p>
+          Makasih udah jadi orang hebat dan udah jadi bagian
+          penting di hidup aku. Semoga tahun ini penuh hal-hal baik buat kamu.
+        </p>
+        <span class="page-label">3 / 4</span>
+      </div>
+
+      <div class="page" id="page-4">
+        <h1>Selamanya 💫</h1>
+        <p><b>You're gonna live forever in me</b> 🥺</p>
+        <p>Happy birthday, Rania!</p>
+        <span class="page-label">4 / 4</span>
+      </div>
+
     </div>
   </div>
+
+  <div class="nav">
+    <button id="prevBtn" onclick="prevPage()">‹</button>
+    <span id="pageCounter">1 / 4</span>
+    <button id="nextBtn" onclick="nextPage()">›</button>
+  </div>
+
   <audio id="bgm" src="lagu.mp3" loop></audio>
 </div>
 
 <script>
+  // ===== PIN =====
   const pinInput = document.getElementById('pinInput');
   const correctPin = '270701';
 
-  // CEK OTOMATIS TIAP KETIK
   pinInput.addEventListener('input', function() {
-    if(pinInput.value === correctPin){
-      // PIN BENER
+    if (pinInput.value === correctPin) {
       document.getElementById('pin-page').style.opacity = '0';
       setTimeout(() => {
         document.getElementById('pin-page').style.display = 'none';
         document.getElementById('main-page').classList.add('show');
-        document.getElementById('bgm').play(); // Autoplay lagu
+        document.getElementById('bgm').play();
         createBalloons();
-      }, 500); // delay biar ada efek fade
-    } else if(pinInput.value.length === 6) {
-      // PIN SALAH 6 digit
+      }, 500);
+    } else if (pinInput.value.length === 6) {
       document.getElementById('error').style.display = 'block';
       setTimeout(() => { pinInput.value = ''; document.getElementById('error').style.display = 'none'; }, 1000);
     }
   });
-  
-  // BALON
+
+  // ===== BOOK NAVIGATION =====
+  const totalPages = 4;
+  let current = 1; // number of pages currently turned (0-4)
+  const pages = [null, document.getElementById('page-1'), document.getElementById('page-2'), document.getElementById('page-3'), document.getElementById('page-4')];
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('pageCounter');
+
+  function updateNav() {
+    counter.textContent = current + ' / ' + totalPages;
+    prevBtn.disabled = current <= 1;
+    nextBtn.disabled = current >= totalPages;
+  }
+
+  function nextPage() {
+    if (current >= totalPages) return;
+    pages[current].classList.add('turned');
+    current++;
+    updateNav();
+  }
+
+  function prevPage() {
+    if (current <= 1) return;
+    current--;
+    pages[current].classList.remove('turned');
+    updateNav();
+  }
+
+  updateNav();
+
+  // ===== BALON =====
   function createBalloons(){
-    for(let i=0; i<15; i++){
+    for (let i = 0; i < 15; i++) {
       let b = document.createElement('div');
       b.className = 'balloon';
-      b.style.left = Math.random()*100 + 'vw';
-      b.style.animationDelay = Math.random()*5 + 's';
-      b.style.background = i%2==0 ? '#ffb6c1' : '#fff0f5';
+      b.style.left = Math.random() * 100 + 'vw';
+      b.style.animationDelay = Math.random() * 5 + 's';
+      b.style.background = i % 2 == 0 ? '#ffb6c1' : '#fff0f5';
       document.body.appendChild(b);
     }
   }
